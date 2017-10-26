@@ -1,0 +1,79 @@
+{
+  "name": "ecdid",
+  "version": "1.0.0",
+  "description": "Electronic Concrete Delivery Identification",
+  "main": "lib/index.js",
+  "scripts": {
+    "postinstall": "npm run build",
+    "test": "xo && ava",
+    "test:watch": "ava --watch",
+    "build": "babel src --out-dir lib --source-maps",
+    "start": "node lib/index.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/ECDID/code.git"
+  },
+  "keywords": [
+    "concrete"
+  ],
+  "author": "ECDID Team",
+  "license": "UNLICENSED",
+  "private": true,
+  "bugs": {
+    "url": "https://github.com/ECDID/code/issues"
+  },
+  "homepage": "https://github.com/ECDID/code#readme",
+  "devDependencies": {
+    "ava": "^0.23.0",
+    "babel-cli": "^6.26.0",
+    "babel-preset-env": "^1.6.1",
+    "babel-register": "^6.26.0",
+    "supertest": "^3.0.0",
+    "xo": "^0.18.2"
+  },
+  "dependencies": {
+    "body-parser": "^1.18.2",
+    "cookie-parser": "^1.4.3",
+    "express": "^4.16.2",
+    "morgan": "^1.9.0",
+    "pg": "^7.3.0"
+  },
+  "babel": {
+    "presets": [
+      [
+        "env",
+        {
+          "targets": {
+            "node": "current"
+          }
+        }
+      ]
+    ]
+  },
+  "ava": {
+    "files": [
+      "test/**/*.test.js"
+    ],
+    "source": [
+      "src/**/*.js"
+    ],
+    "require": [
+      "babel-register"
+    ],
+    "babel": "inherit"
+  },
+  "xo": {
+    "rules": {
+      "quotes": ["error", "double", {
+        "allowTemplateLiterals": true
+      }],
+      "object-curly-spacing": ["error", "always"],
+      "new-cap": ["error", {
+        "newIsCap": true,
+        "capIsNew": true,
+        "capIsNewExceptions": ["Router"]
+      }]
+    }
+  }
+}
