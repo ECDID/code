@@ -1,9 +1,10 @@
 import express from "express";
 import logger from "morgan";
-import cookieParser from "cookie-parser";
+import session from "express-session";
 import bodyParser from "body-parser";
 
-import sessions from "./routes/sessions";
+import { passport, sessions } from "./routes/sessions";
+import projects from "./routes/projects";
 
 // Create app
 const app = express();
@@ -18,10 +19,24 @@ app.use(logger("dev", {
 // Parse incoming data
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
-app.use(cookieParser());
+
+// TODO: use actual secret, use a real session store
+app.use(session({
+	secret: "memes only",
+	resave: false,
+	rolling: true,
+	saveUninitialized: false,
+	cookie: {
+		maxAge: (60 * 60 * 24)
+	}
+}));
+
+// Set up authentication
+app.use(passport.initialize());
+app.use(passport.session());
 
 // Set up routes
-app.use("/", sessions /* , others... */);
+app.use("/", projects, sessions);
 
 // Catch 404 and forward to error handler
 app.use((req, res, next) => {
