@@ -8,7 +8,7 @@
     "test": "xo && ava",
     "test:watch": "ava --watch",
     "build": "babel src --out-dir lib --source-maps",
-    "start": "node lib/index.js"
+    "start": "npm run build && node lib/index.js"
   },
   "repository": {
     "type": "git",
