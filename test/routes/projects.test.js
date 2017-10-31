@@ -20,4 +20,5 @@ test("GET / authenticated", async t => {
 
 	const res = await agent.get("/");
 	t.is(res.status, 200);
+	t.is(res.type, "text/html");
 });

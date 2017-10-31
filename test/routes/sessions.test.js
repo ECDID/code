@@ -15,6 +15,7 @@ const GOOD_LOGIN = { username: "mark", password: "1234" };
 test("GET /login", async t => {
 	const res = await request(app).get("/login");
 	t.is(res.status, 200);
+	t.is(res.type, "text/html");
 });
 
 test("POST /login failure", async t => {
