@@ -41,6 +41,7 @@ const sessions = Router();
 
 sessions.get("/login", (req, res) => {
 	// TODO: render Taylor's login page
+	res.type("html");
 	res.end(`
 	<form action="/login" method="post">
 		<div>
