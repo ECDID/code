@@ -15,6 +15,11 @@ Code for the ECDID senior project will live here... watch this space
 
 `git checkout --track -b whatever-name-you-want origin/remote-branch-name`
 
+## Update local repository with remote
+
+`git pull`
+
+
 ## Setup
 
 `yarn` or `npm install`
@@ -22,3 +27,4 @@ Code for the ECDID senior project will live here... watch this space
 ## Run
 
 `yarn start` or `npm start`
+
