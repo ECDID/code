@@ -1,6 +1,9 @@
 ECDID
 =====
 
+[![Build Status](https://img.shields.io/travis/ECDID/code/master.svg)](https://travis-ci.org/ECDID/code)
+[![Coverage Status](https://img.shields.io/coveralls/github/ECDID/code/master.svg)](https://coveralls.io/github/ECDID/code?branch=master)
+
 Code for the ECDID senior project will live here... watch this space
 
 ## Git Clone
