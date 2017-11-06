@@ -51,7 +51,7 @@ app.use((req, res, next) => {
 // eslint-disable-next-line no-unused-vars
 app.use((err, req, res, next) => {
 	// Render the error page
-	res.status(err.status || 500);
+	res.status(err.status || /* istanbul ignore next */ 500);
 	res.end(err.message);
 });
 
