@@ -19,6 +19,7 @@ passport.use(new LocalStrategy(async (username, password, done) => {
 			done(null, null, { message: "Bad credentials" });
 		}
 	} catch (err) {
+		/* istanbul ignore next: remove this when adding actual authentication */
 		done(err);
 	}
 }));
@@ -31,8 +32,9 @@ passport.deserializeUser(async (id, cb) => {
 	try {
 		// Const user = await User.getById(id);
 		const user = TEST_USER;
-		cb(null, user ? user : null);
+		cb(null, user);
 	} catch (err) {
+		/* istanbul ignore next: remove this when adding actual authentication */
 		cb(err);
 	}
 });
