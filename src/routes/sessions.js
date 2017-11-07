@@ -1,6 +1,7 @@
 import { Router } from "express";
 import passport from "passport";
 import { Strategy as LocalStrategy } from "passport-local";
+import { ensureLoggedOut } from "connect-ensure-login";
 
 // TODO: remove when actual user authentication
 const TEST_USER = { id: 1, username: "mark", password: "1234" };
@@ -41,7 +42,7 @@ passport.deserializeUser(async (id, cb) => {
 
 const sessions = Router();
 
-sessions.get("/login", (req, res) => {
+sessions.get("/login", ensureLoggedOut(), (req, res) => {
 	// TODO: render Taylor's login page
 	res.type("html");
 	res.end(`
