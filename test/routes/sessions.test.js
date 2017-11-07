@@ -40,3 +40,29 @@ test("POST /login success", async t => {
 	t.is(res.status, 302);
 	t.is(res.header.location, "/");
 });
+
+test("GET /login already logged in", async t => {
+	const agent = request.agent(app);
+
+	await agent.post("/login")
+		.type("form")
+		.send(GOOD_LOGIN);
+
+	const res = await agent.get("/login");
+	t.is(res.status, 302);
+	t.is(res.header.location, "/");
+});
+
+test("POST /login already logged in", async t => {
+	const agent = request.agent(app);
+
+	await agent.post("/login")
+		.type("form")
+		.send(GOOD_LOGIN);
+
+	const res = await agent.post("/login")
+		.type("form")
+		.send(GOOD_LOGIN);
+	t.is(res.status, 302);
+	t.is(res.header.location, "/");
+});
