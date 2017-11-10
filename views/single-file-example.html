@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="UTF-8" />
+    <title>ACME RFID</title>
+    <script src="https://unpkg.com/react@16/umd/react.development.js"></script>
+    <script src="https://unpkg.com/react-dom@16/umd/react-dom.development.js"></script>
+    <script src="https://unpkg.com/babel-standalone@6.15.0/babel.min.js"></script>
+  </head>
+  <body>
+	<img src="http://spokane.access2experience.com/img/profile/7d45ef8c-d70f-42b0-afb1-963ec1100489.jpg" height="200" width="500"/>
+    <div id="root"></div>
+  </body>
+</html>
+
+<script type="text/babel">
+
+class NameForm extends React.Component {
+  constructor(props) {
+    super(props);
+    this.state = {
+		username: '',
+		password: ''
+	};
+
+    this.handleChange = this.handleChange.bind(this);
+    this.handleSubmit = this.handleSubmit.bind(this);
+	this.checkPassword = this.checkPassword.bind(this);
+  }
+
+  handleChange(event) {
+    this.setState({username: event.target.value});
+  }
+  
+  checkPassword(event) {
+    this.setState({password: event.target.value});
+  }
+
+  handleSubmit(event) {
+	if (this.state.username === "Taylor" && this.state.password === "password")
+	{
+		location.replace("file:///C:/Users/tjones12/Documents/Personal/page_2_senior_design.html");
+		//alert('A name was submitted: ' + this.state.username + '\n with password: ' + this.state.password);
+	}
+	else
+	{
+		alert('Incorrect username and/or password');
+	}
+    event.preventDefault();
+  }
+  
+  
+
+  render() {
+    return (
+      <form onSubmit={this.handleSubmit}>
+        <label>
+          Name:
+          <input type="text" value={this.state.username} onChange={this.handleChange} />
+        </label>
+		<br/>
+		<label>
+			Password:
+			<input type="password" value={this.state.password} onChange={this.checkPassword} />
+		</label>
+		<br/>
+        <input type="submit" value="Submit" />
+      </form>
+    );
+  }
+}
+
+ReactDOM.render(
+  <NameForm />,
+  document.getElementById('root')
+);
+
+ReactDOM.render(
+  <NameForm />,
+  document.getElementById('root')
+);
+
+</script>
