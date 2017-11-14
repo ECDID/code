@@ -17,10 +17,10 @@
 
 <script type="text/babel">
 
-const people = ['Project_01', 'Project_02', 'Project_03', 'RFID_1', 'RFID_2', 'RFID_3'];
+const project = ['Project_01', 'Project_02', 'Project_03', 'RFID_1', 'RFID_2', 'RFID_3'];
 
-const originalList = people.map(person =>{
-  return <li>{person}</li>
+const originalList = project.map(person =>{
+  return <li><a className='button' href={person + '.html'}>{person}</a></li>
 });
 
 class ListTest extends React.Component {
@@ -36,9 +36,9 @@ class ListTest extends React.Component {
   }
 
   changeList(){
-    const peopleLis = people.map(person =>{
+    const peopleLis = project.map(person =>{
       if(person.toLowerCase().includes(this.state.searchKey.toLowerCase()))
-        return <li>{person}</li>
+        return <li><a className='button' href={person + '.html'}>{person}</a></li>
     });
     this.setState({projectList: peopleLis});
   }
@@ -73,3 +73,16 @@ ReactDOM.render(
 );
 
 </script>
+
+<style>
+  .button{
+    background-color: #f44336;
+    color: black;
+    padding: 14px 25px;
+    text-align: center;
+    text-decoration: none;
+    display: inline-block;
+    border: solid;
+    border-color: white;
+}
+</style>
