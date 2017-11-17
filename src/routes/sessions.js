@@ -2,25 +2,44 @@ import { Router } from "express";
 import passport from "passport";
 import { Strategy as LocalStrategy } from "passport-local";
 import { ensureLoggedOut } from "connect-ensure-login";
+import db from "../models"
+
 
 // TODO: remove when actual user authentication
-const TEST_USER = { id: 1, username: "mark", password: "1234" };
 
-passport.use(new LocalStrategy(async (username, password, done) => {
+passport.use(new LocalStrategy(async (name, pass, done) => {
 	try {
+		const user = await db.logins.findOne({
+			
+			where: {
+				username: name,
+				password: pass
+			}
+
+		})
+
+		if (user  === null || user == 'undefined'){
+			done(null, null, {message: "Bad credentials" });
+		}
+		else{ // probably not the best way to do this, only for the demo, DEFINITELY CHANGE LATER
+			done(null, user);
+		}
+
 		// TODO: use actual user authentication
 		// Const user = await User.validateUser(username, password);
 		// if (user) {
 
 		// TODO: remove these next 2 lines when actual authentication
-		const user = TEST_USER;
+		/*const user = TEST_USER;
 		if (user.username === username && user.password === password) {
 			done(null, user);
 		} else {
 			done(null, null, { message: "Bad credentials" });
 		}
+	*/
 	} catch (err) {
 		/* istanbul ignore next: remove this when adding actual authentication */
+
 		done(err);
 	}
 }));
@@ -31,8 +50,13 @@ passport.serializeUser((user, cb) => {
 
 passport.deserializeUser(async (id, cb) => {
 	try {
-		// Const user = await User.getById(id);
-		const user = TEST_USER;
+		const user = await db.logins.findOne({
+			
+			where: {
+				id: id
+			}
+
+		})
 		cb(null, user);
 	} catch (err) {
 		/* istanbul ignore next: remove this when adding actual authentication */

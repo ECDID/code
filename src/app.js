@@ -3,9 +3,14 @@ import logger from "morgan";
 import session from "express-session";
 import bodyParser from "body-parser";
 
+import db from "./models"
 import { passport, sessions } from "./routes/sessions";
 import projects from "./routes/projects";
 
+var propValue;
+
+
+console.log(db.logins);
 // Create app
 const app = express();
 

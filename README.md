@@ -6,11 +6,19 @@ ECDID
 
 Code for the ECDID senior project will live here... watch this space
 
-## Git Clone
+## Clone and Setup
 
 `git clone https://github.com/ECDID/code.git`
 
 `cd code/`
+
+`npm install`
+
+`node_modules/.bin/sequelize init`
+
+Edit /config/config.json with your correct database information
+
+`./setup.sh`
 
 ## Switch to A Specific Branch
 
