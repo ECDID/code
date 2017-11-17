@@ -12,7 +12,11 @@ Code for the ECDID senior project will live here... watch this space
 
 `cd code/`
 
+`npm install`
+
 `node_modules/.bin/sequelize init`
+
+Edit /config/config.json with your correct database information
 
 `./setup.sh`
 
