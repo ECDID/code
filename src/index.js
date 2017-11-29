@@ -23,8 +23,4 @@ const main = async () => {
 	});
 };
 
-// https://github.com/Vincit/objection.js/tree/master/examples/express-es7
-// https://github.com/scoutforpets/objection-password
-// https://github.com/Vincit/objection.js/issues/196
-
 main();
