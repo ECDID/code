@@ -1,3 +1,4 @@
+import * as path from "path";
 import test from "ava";
 import request from "supertest";
 import Knex from "knex";
@@ -5,6 +6,9 @@ import { Model } from "objection";
 
 import User from "../../src/models/user";
 import app from "../../src/app";
+import config from "../../knexfile";
+
+require("dotenv").config({ path: path.join(__dirname, "../../.env") });
 
 const BAD_LOGINS = [
 	{ username: "noexists", password: "1234" },   // Incorrect username
