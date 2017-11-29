@@ -7,7 +7,7 @@ const up = async knex => {
 	});
 };
 
-/* istanbul ignore next: */
+/* istanbul ignore next */
 const down = async knex => {
 	await knex.schema.dropTableIfExists("User");
 };
