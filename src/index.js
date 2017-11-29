@@ -14,7 +14,6 @@ const knex = Knex(config[process.env.NODE_ENV]);
 Model.knex(knex);
 
 const main = async () => {
-	await knex.migrate.latest();
 	const server = http.createServer(app);
 	server.listen(PORT, err => {
 		if (err) {
