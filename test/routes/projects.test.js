@@ -1,21 +1,15 @@
-import * as path from "path";
 import test from "ava";
 import request from "supertest";
-import Knex from "knex";
-import { Model } from "objection";
+
+import setupDB from "../helpers";
 
 import User from "../../src/models/user";
 import app from "../../src/app";
-import config from "../../knexfile";
-
-require("dotenv").config({ path: path.join(__dirname, "../../.env") });
 
 const GOOD_LOGIN = { username: "mark", password: "1234" };
 
 test.before(async () => {
-	const knex = Knex(config[process.env.NODE_ENV]);
-	await knex.migrate.latest();
-	Model.knex(knex);
+	await setupDB();
 	await User.query().insert(GOOD_LOGIN);
 });
 
