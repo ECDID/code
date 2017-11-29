@@ -1,26 +1,20 @@
 import http from "http";
+import * as path from "path";
 import Knex from "knex";
 import { Model } from "objection";
+import config from "../knexfile";
 import app from "./app";
 
-const PORT = 3000;
+require("dotenv").config({ path: path.join(__dirname, "../../.env") });
 
-const knex = Knex({
-	client: "sqlite3",
-	useNullAsDefault: true,
-	connection: {
-		filename: ":memory:"
-	}
-});
+const PORT = process.env.PORT;
+
+const knex = Knex(config[process.env.NODE_ENV]);
 
 Model.knex(knex);
 
 const main = async () => {
-	await knex.schema.createTableIfNotExists("User", table => {
-		table.increments("id").primary();
-		table.string("username");
-		table.string("password");
-	});
+	await knex.migrate.latest();
 	const server = http.createServer(app);
 	server.listen(PORT, err => {
 		if (err) {

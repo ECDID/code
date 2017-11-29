@@ -39,6 +39,7 @@
   "dependencies": {
     "body-parser": "^1.18.2",
     "connect-ensure-login": "^0.1.1",
+    "dotenv": "^4.0.0",
     "express": "^4.16.2",
     "express-session": "^1.15.6",
     "knex": "^0.14.2",
@@ -92,7 +93,9 @@
           "newIsCap": true,
           "capIsNew": true,
           "capIsNewExceptions": [
-            "Router", "Password", "Knex"
+            "Router",
+            "Password",
+            "Knex"
           ]
         }
       ]

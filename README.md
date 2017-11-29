@@ -12,6 +12,8 @@ Code for the ECDID senior project will live here... watch this space
 
 `cd code/`
 
+`echo PORT=3000\\nNODE_ENV=development > .env`
+
 ## Switch to A Specific Branch
 
 `git fetch`
@@ -21,7 +23,6 @@ Code for the ECDID senior project will live here... watch this space
 ## Update local repository with remote
 
 `git pull --rebase`
-
 
 ## Setup
 
