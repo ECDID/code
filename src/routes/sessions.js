@@ -3,24 +3,22 @@ import passport from "passport";
 import { Strategy as LocalStrategy } from "passport-local";
 import { ensureLoggedOut } from "connect-ensure-login";
 
-// TODO: remove when actual user authentication
-const TEST_USER = { id: 1, username: "mark", password: "1234" };
+import User from "../models/user";
 
 passport.use(new LocalStrategy(async (username, password, done) => {
 	try {
-		// TODO: use actual user authentication
-		// Const user = await User.validateUser(username, password);
-		// if (user) {
-
-		// TODO: remove these next 2 lines when actual authentication
-		const user = TEST_USER;
-		if (user.username === username && user.password === password) {
-			done(null, user);
+		const user = await User.query().findOne({ username });
+		if (user instanceof User) {
+			if (await user.verifyPassword(password)) {
+				done(null, user);
+			} else {
+				done(null, null, { message: "Bad credentials" });
+			}
 		} else {
 			done(null, null, { message: "Bad credentials" });
 		}
 	} catch (err) {
-		/* istanbul ignore next: remove this when adding actual authentication */
+		/* istanbul ignore next */
 		done(err);
 	}
 }));
@@ -31,8 +29,7 @@ passport.serializeUser((user, cb) => {
 
 passport.deserializeUser(async (id, cb) => {
 	try {
-		// Const user = await User.getById(id);
-		const user = TEST_USER;
+		const user = await User.query().findById(id);
 		cb(null, user);
 	} catch (err) {
 		/* istanbul ignore next: remove this when adding actual authentication */
@@ -62,7 +59,7 @@ sessions.get("/login", ensureLoggedOut(), (req, res) => {
 	`);
 });
 
-sessions.post("/login", passport.authenticate("local", {
+sessions.post("/login", ensureLoggedOut(), passport.authenticate("local", {
 	failureRedirect: "/login",
 	successReturnToOrRedirect: "/"
 }));

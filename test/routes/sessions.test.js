@@ -1,6 +1,9 @@
 import test from "ava";
 import request from "supertest";
+import Knex from "knex";
+import { Model } from "objection";
 
+import User from "../../src/models/user";
 import app from "../../src/app";
 
 const BAD_LOGINS = [
@@ -11,6 +14,23 @@ const BAD_LOGINS = [
 ];
 
 const GOOD_LOGIN = { username: "mark", password: "1234" };
+
+test.before(async () => {
+	const knex = Knex({
+		client: "sqlite3",
+		useNullAsDefault: true,
+		connection: {
+			filename: ":memory:"
+		}
+	});
+	Model.knex(knex);
+	await knex.schema.createTableIfNotExists("User", table => {
+		table.increments("id").primary();
+		table.string("username");
+		table.string("password");
+	});
+	await User.query().insert(GOOD_LOGIN);
+});
 
 test("GET /login", async t => {
 	const res = await request(app).get("/login");
