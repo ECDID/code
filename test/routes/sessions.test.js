@@ -16,19 +16,9 @@ const BAD_LOGINS = [
 const GOOD_LOGIN = { username: "mark", password: "1234" };
 
 test.before(async () => {
-	const knex = Knex({
-		client: "sqlite3",
-		useNullAsDefault: true,
-		connection: {
-			filename: ":memory:"
-		}
-	});
+	const knex = Knex(config[process.env.NODE_ENV]);
+	await knex.migrate.latest();
 	Model.knex(knex);
-	await knex.schema.createTableIfNotExists("User", table => {
-		table.increments("id").primary();
-		table.string("username");
-		table.string("password");
-	});
 	await User.query().insert(GOOD_LOGIN);
 });
 
