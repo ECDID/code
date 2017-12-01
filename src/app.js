@@ -1,3 +1,4 @@
+import path from "path";
 import express from "express";
 import logger from "morgan";
 import session from "express-session";
@@ -35,9 +36,9 @@ app.use(session({
 // Set up authentication
 app.use(passport.initialize());
 app.use(passport.session());
-app.engine('html', mustache)
-app.set('views', __dirname + '/../views');
-app.set('view engine', 'html');
+app.engine("html", mustache);
+app.set("views", path.join(__dirname, "../views"));
+app.set("view engine", "html");
 
 // Set up routes
 app.use("/", projects, sessions);

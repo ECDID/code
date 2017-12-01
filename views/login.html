@@ -31,7 +31,7 @@ class NameForm extends React.Component {
   handleChange(event) {
     this.setState({username: event.target.value});
   }
-  
+
   checkPassword(event) {
     this.setState({password: event.target.value});
   }
@@ -48,20 +48,20 @@ class NameForm extends React.Component {
 	}
     event.preventDefault();
   }
-  
-  
+
+
 
   render() {
     return (
-      <form action='/login'>
+      <form action='/login' method='post'>
         <label>
           Name:
-          <input type="text" value={this.state.username} onChange={this.handleChange} />
+          <input name='username' type="text" value={this.state.username} onChange={this.handleChange} />
         </label>
 		<br/>
 		<label>
 			Password:
-			<input type="password" value={this.state.password} onChange={this.checkPassword} />
+			<input name='password' type="password" value={this.state.password} onChange={this.checkPassword} />
 		</label>
 		<br/>
         <input type="submit" value="Submit" />
