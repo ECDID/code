@@ -41,8 +41,7 @@ const sessions = Router();
 
 sessions.get("/login", ensureLoggedOut(), (req, res) => {
 	// TODO: render Taylor's login page
-	const login_path = ''
-	res.render('login.html');
+	res.render("login.html");
 });
 
 sessions.post("/login", ensureLoggedOut(), passport.authenticate("local", {
