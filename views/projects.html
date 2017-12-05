@@ -1,0 +1,219 @@
+<!--
+TODO: Triple buttons working as intended
+      Figure out a way to have a complex data type: just name isnt going to cut it.
+      Configure CSS, but I think this may best be saved for the switch over to conventional JS files.
+
+-->
+
+
+
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="UTF-8" />
+    <title>Page 2</title>
+    <script src="https://unpkg.com/react@16/umd/react.development.js"></script>
+    <script src="https://unpkg.com/react-dom@16/umd/react-dom.development.js"></script>
+    <script src="https://unpkg.com/babel-standalone@6.15.0/babel.min.js"></script>
+  </head>
+  <body>
+
+  <img src="http://spokane.access2experience.com/img/profile/7d45ef8c-d70f-42b0-afb1-963ec1100489.jpg" height="110" width="275" align:"middle"/>
+    <div id="root"></div>
+  </body>
+</html>
+
+<script type="text/babel">
+
+const project = ['Project_01', 'Project_02', 'Project_03','Project_04', 'Project_05', 'Project_06', 'Project_07'];
+
+const rfid = ['RFID_0001', 'RFID_0002', 'RFID_0003', 'RFID_0004',
+              'RFID_0005', 'RFID_0006', 'RFID_0007', 'RFID_0008',
+              'RFID_0009', 'RFID_0010', 'RFID_0011', 'RFID_0012',
+              'RFID_0013', 'RFID_0014' ]
+
+const dict = {'Project_01': ['RFID_0001','RFID_0002'],
+              'Project_02': ['RFID_0003', 'RFID_0004'],
+              'Project_03': ['RFID_0005', 'RFID_0006'],
+              'Project_04': ['RFID_0007', 'RFID_0008'],
+              'Project_05': ['RFID_0009', 'RFID_0010'],
+              'Project_06': ['RFID_0011', 'RFID_0012'],
+              'Project_07': ['RFID_0013', 'RFID_0014']
+
+            };
+
+const rfid_dict = {'RFID001': ['RFID_0001','RFID_0002'],
+              'Project_02': ['RFID_0003', 'RFID_0004'],
+              'Project_03': ['RFID_0005', 'RFID_0006'],
+              'Project_04': ['RFID_0007', 'RFID_0008'],
+              'Project_05': ['RFID_0009', 'RFID_0010'],
+              'Project_06': ['RFID_0011', 'RFID_0012'],
+              'Project_07': ['RFID_0013', 'RFID_0014']
+
+            };
+
+
+class ListPage extends React.Component {
+  constructor(props){
+    super(props);
+    this.state = {
+      projectList: this.props.list.map(person =>{return <li><button className='button' onClick={this.showRFID.bind(this,person)}>{person}</button></li>}),
+      searchKey: '',
+      showRFIDlist: false,
+      currentProject: ''
+    };
+    this.changeList = this.changeList.bind(this);
+    this.searchKeyChange = this.searchKeyChange.bind(this);
+    this.setOriginal = this.setOriginal.bind(this);
+    this.showRFID = this.showRFID.bind(this);
+  }
+
+  changeList(){
+    const peopleLis = this.props.list.map(person =>{
+      if(person.toLowerCase().includes(this.state.searchKey.toLowerCase()))
+        return <li><button className='button' onClick={this.showRFID.bind(this,person)}>{person}</button></li>
+    });
+    this.setState({projectList: peopleLis});
+    this.setState({showRFIDlist: false});
+  }
+
+  searchKeyChange(event){
+    this.setState({searchKey: event.target.value});
+  }
+
+  setOriginal(){
+    this.setState({projectList: this.props.list.map(person =>{
+      return <li><button className='button' onClick={this.showRFID.bind(this,person)}>{person}</button></li>
+    })});
+    this.setState({showRFIDlist: false});
+  }
+
+  showRFID(person){
+    this.setState({showRFIDlist: true});
+    this.setState({currentProject: person});
+  }
+
+
+
+  render() {
+    return(
+      <div>
+        <h1>Project Name: </h1>
+          <label>
+            <h4>Search Projects:</h4>
+            <input type="text" value={this.state.searchKey} onChange={this.searchKeyChange} />
+          </label>
+          <button onClick={this.changeList}>Search</button>
+        <ul>{this.state.projectList}</ul>
+        <button onClick={this.setOriginal}>Reset</button>
+        {this.state.showRFIDlist ?
+           <RfidPage project={this.state.currentProject} dict={dict}/> :
+           null
+        }
+      </div>
+    );
+  }
+}
+
+class TicketPage extends React.Component {
+  render() {
+    return(
+      <div id>
+        <h1>Ticket Information</h1>
+        {this.props.rfid_value}
+        <ul>
+        <li> Date: 03/03/03</li>
+        <li> Slump Percentage: 03% </li>
+        <li> Sand Percent: 30% </li>
+        <li> Mud Percent: 42% </li>
+        <li> Portland Rating: 69 / 133</li>
+        <li> Mix Temp: 95 C</li>
+        <li> Mix Ratio: 33/2</li>
+        </ul>
+        <button> Print </button>
+        <button> Share </button>
+        <button> Reset </button>
+      </div>
+    );
+  }
+}
+
+class RfidPage extends React.Component {
+  constructor(props){
+    super(props);
+    this.state = {
+      currentTicket: '',
+      showTicket: false
+    };
+    this.showTicket = this.showTicket.bind(this);
+  }
+
+  showTicket(item){
+    this.setState({showTicket: true});
+    this.setState({currentTicket: item});
+  }
+
+  render() {
+    return(
+      <div>
+        <h1>Select RFID Tag</h1>
+        {this.props.dict[this.props.project].map(item => (
+            <li><button className='button' onClick={this.showTicket.bind(this,item)}>{item}</button></li>
+          ))}
+        {this.state.showTicket ?
+           <TicketPage rfid_value={this.state.currentTicket}/> :
+           null
+        }
+      </div>
+    );
+  }
+}
+
+// ReactDOM.render goes here:
+ReactDOM.render(
+  <ListPage list={project}/>,
+  document.getElementById('root')
+);
+
+</script>
+
+<style>
+  head {background-color: #000000;}
+  h1 {font-family: sans-serif;
+      padding:0px;
+      margin:0px;
+      padding-top: 15px;}
+  h4 {font-family: sans-serif;
+      margin-bottom:0px;
+      margin-top: 15px;
+  }
+  ul { list-style-type: none;
+       padding:0px;
+       margin:0px;
+     }
+
+  li { list-style-type: none;
+       padding:0px;
+       margin:0px;
+     }
+  button{
+    font-family: sans-serif;
+    display: inline-block;
+    font-weight: bold;
+    font-size: 14px;
+  }
+  .label{}
+  .button{
+    background-color: #f44336;
+    color: black;
+    font-size: 16px;
+    font-weight:bold;
+    padding: 5px 100px;
+    text-align: center;
+    text-decoration: ;
+    display: inline-block;
+    border: solid;
+    border-radius: 3px;
+    border-color: #FFFFFF;
+}
+</style>

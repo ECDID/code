@@ -36,6 +36,8 @@ app.use(session({
 // Set up authentication
 app.use(passport.initialize());
 app.use(passport.session());
+
+// Set up views
 app.engine("html", mustache);
 app.set("views", path.join(__dirname, "../views"));
 app.set("view engine", "html");
