@@ -48,4 +48,4 @@ sessions.post("/login", ensureLoggedOut(), passport.authenticate("local", {
 	successReturnToOrRedirect: "/"
 }));
 
-export { passport, sessions };
+export { sessions as default, passport };
