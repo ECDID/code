@@ -5,7 +5,7 @@ import session from "express-session";
 import bodyParser from "body-parser";
 import { mustache } from "consolidate";
 
-import { passport, sessions } from "./routes/sessions";
+import sessions, { passport } from "./routes/sessions";
 import projects from "./routes/projects";
 
 // Create app
