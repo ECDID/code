@@ -40,8 +40,7 @@ passport.deserializeUser(async (id, cb) => {
 const sessions = Router();
 
 sessions.get("/login", ensureLoggedOut(), (req, res) => {
-	// TODO: render Taylor's login page
-	res.render("login.html");
+	res.render("login");
 });
 
 sessions.post("/login", ensureLoggedOut(), passport.authenticate("local", {
