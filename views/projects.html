@@ -52,68 +52,128 @@ const rfid_dict = {'RFID001': ['RFID_0001','RFID_0002'],
 
             };
 
-
-class ListPage extends React.Component {
+class MainComponent extends React.Component{
   constructor(props){
-    super(props);
-    this.state = {
-      projectList: this.props.list.map(person =>{return <li><button className='button' onClick={this.showRFID.bind(this,person)}>{person}</button></li>}),
-      searchKey: '',
-      showRFIDlist: false,
-      currentProject: ''
-    };
-    this.changeList = this.changeList.bind(this);
-    this.searchKeyChange = this.searchKeyChange.bind(this);
-    this.setOriginal = this.setOriginal.bind(this);
-    this.showRFID = this.showRFID.bind(this);
+	super(props);
+	this.state = {
+	  current_project: '',
+	  current_rfid: '',
+	  showProjectList: true,
+	  showRfidList: false,
+	  showTicketList:false
+	};
+	this.handleInputProject = this.handleInputProject.bind(this);
+	this.handleInputRfid = this.handleInputRfid.bind(this);
+	this.handleInputDisplay = this.handleInputDisplay.bind(this);
   }
-
-  changeList(){
-    const peopleLis = this.props.list.map(person =>{
-      if(person.toLowerCase().includes(this.state.searchKey.toLowerCase()))
-        return <li><button className='button' onClick={this.showRFID.bind(this,person)}>{person}</button></li>
-    });
-    this.setState({projectList: peopleLis});
-    this.setState({showRFIDlist: false});
+  
+  handleInputProject(newInput){
+	this.setState({current_project: newInput});
   }
-
-  searchKeyChange(event){
-    this.setState({searchKey: event.target.value});
+  
+  handleInputRfid(newRfid){
+	this.setState({current_rfid: newRfid});
   }
-
-  setOriginal(){
-    this.setState({projectList: this.props.list.map(person =>{
-      return <li><button className='button' onClick={this.showRFID.bind(this,person)}>{person}</button></li>
-    })});
-    this.setState({showRFIDlist: false});
+  
+  handleInputDisplay(project_bool,rfid_bool,ticket_bool){
+	this.setState({showProjectList: project_bool});
+	this.setState({showRfidList: rfid_bool});
+	this.setState({showTicketList: ticket_bool});
   }
-
-  showRFID(person){
-    this.setState({showRFIDlist: true});
-    this.setState({currentProject: person});
-  }
-
-
-
-  render() {
+  
+  render(){
     return(
       <div>
-        <h1>Project Name: </h1>
-          <label>
-            <h4>Search Projects:</h4>
-            <input type="text" value={this.state.searchKey} onChange={this.searchKeyChange} />
-          </label>
-          <button onClick={this.changeList}>Search</button>
-        <ul>{this.state.projectList}</ul>
-        <button onClick={this.setOriginal}>Reset</button>
-        {this.state.showRFIDlist ?
-           <RfidPage project={this.state.currentProject} dict={dict}/> :
+		{this.state.showProjectList ?
+			<ListPage list={project} callback_project={this.handleInputProject} callback_display={this.handleInputDisplay}/> :
+			null
+		}
+		{this.state.showRfidList ?
+           <RfidPage project={this.state.current_project} dict={dict} callback_rfid={this.handleInputRfid} callback_display={this.handleInputDisplay}/> :
+           null
+        }
+		{this.state.showTicketList ?
+           <TicketPage rfid_value={this.state.current_rfid}/> :
            null
         }
       </div>
     );
   }
 }
+			
+class ListPage extends React.Component {
+  constructor(props){
+    super(props);
+    this.state = {
+      projectList: this.props.list.map(person =>{return <li><button className='button' onClick={this.showRFID.bind(this,person)}>{person}</button></li>}),
+      searchKey: ''
+    };
+    
+    this.searchKeyChange = this.searchKeyChange.bind(this);
+    this.setOriginal = this.setOriginal.bind(this);
+    this.showRFID = this.showRFID.bind(this);
+  }
+
+  
+
+  searchKeyChange(event){
+	var newInput = event.target.value;
+    const new_project_list = this.props.list.map(person =>{
+      if(person.toLowerCase().includes(newInput.toLowerCase()))
+        return <li><button className='button' onClick={this.showRFID.bind(this,person)}>{person}</button></li>
+    });
+    this.setState({projectList: new_project_list});
+  }
+
+  setOriginal(){
+    this.setState({projectList: this.props.list.map(person =>{
+      return <li><button className='button' onClick={this.showRFID.bind(this,person)}>{person}</button></li>
+    })});
+  }
+
+  showRFID(project){
+	this.props.callback_project(project);
+	this.props.callback_display(false,true,false);
+  }
+  
+  render() {
+    return(
+      <div>
+        <h1>Project Name: </h1>
+          <label>
+            <h4>Search Projects:</h4>
+            <input type="text" onChange={this.searchKeyChange} />
+          </label>
+        <ul>{this.state.projectList}</ul>
+        <button onClick={this.setOriginal}>Reset</button>
+      </div>
+    );
+  }
+}
+
+class RfidPage extends React.Component {
+  constructor(props){
+    super(props);
+    this.showTicket = this.showTicket.bind(this);
+  }
+
+  showTicket(item){
+	this.props.callback_rfid(item);
+	this.props.callback_display(false,false,true);
+  }
+
+  render() {
+    return(
+      <div>
+        <h1>Select RFID Tag</h1>
+        {this.props.dict[this.props.project].map(item => (
+            <li><button className='button' onClick={this.showTicket.bind(this,item)}>{item}</button></li>
+          ))}
+      </div>
+    );
+  }
+}
+
 
 class TicketPage extends React.Component {
   render() {
@@ -138,40 +198,10 @@ class TicketPage extends React.Component {
   }
 }
 
-class RfidPage extends React.Component {
-  constructor(props){
-    super(props);
-    this.state = {
-      currentTicket: '',
-      showTicket: false
-    };
-    this.showTicket = this.showTicket.bind(this);
-  }
-
-  showTicket(item){
-    this.setState({showTicket: true});
-    this.setState({currentTicket: item});
-  }
-
-  render() {
-    return(
-      <div>
-        <h1>Select RFID Tag</h1>
-        {this.props.dict[this.props.project].map(item => (
-            <li><button className='button' onClick={this.showTicket.bind(this,item)}>{item}</button></li>
-          ))}
-        {this.state.showTicket ?
-           <TicketPage rfid_value={this.state.currentTicket}/> :
-           null
-        }
-      </div>
-    );
-  }
-}
-
 // ReactDOM.render goes here:
 ReactDOM.render(
-  <ListPage list={project}/>,
+  //<ListPage list={project}/>,
+  <MainComponent/>,
   document.getElementById('root')
 );
 
