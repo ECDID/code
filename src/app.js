@@ -12,10 +12,11 @@ import projects from "./routes/projects";
 const app = express();
 
 // Log requests
-app.use(logger("dev", {
-	skip: () => {
-		return app.get("env") !== "development";
-	}
+const isTest = app.get("env") === "test";
+const isDev = app.get("env") === "development";
+const logType = isDev ? /* istanbul ignore next */ "dev" : "combined";
+app.use(logger(logType, {
+	skip: () => isTest
 }));
 
 // Parse incoming data
