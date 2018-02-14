@@ -3,13 +3,15 @@
   <head>
     <meta charset="UTF-8" />
     <title>ACME RFID</title>
+    <link rel="stylesheet" href="login.css">
     <script src="https://unpkg.com/react@16/umd/react.development.js"></script>
     <script src="https://unpkg.com/react-dom@16/umd/react-dom.development.js"></script>
     <script src="https://unpkg.com/babel-standalone@6.15.0/babel.min.js"></script>
   </head>
+  <header></header>
   <body>
-	<img src="http://spokane.access2experience.com/img/profile/7d45ef8c-d70f-42b0-afb1-963ec1100489.jpg" height="200" width="500"/>
-    <div id="root"></div>
+	<img class="title" src="http://spokane.access2experience.com/img/profile/7d45ef8c-d70f-42b0-afb1-963ec1100489.jpg" height="200" width="500"/>
+    <div id="root" class="root"></div>
   </body>
 </html>
 
@@ -53,19 +55,26 @@ class NameForm extends React.Component {
 
   render() {
     return (
-      <form action='/login' method='post'>
-        <label>
-          Name:
-          <input name='username' type="text" value={this.state.username} onChange={this.handleChange} />
-        </label>
-		<br/>
-		<label>
-			Password:
-			<input name='password' type="password" value={this.state.password} onChange={this.checkPassword} />
-		</label>
-		<br/>
-        <input type="submit" value="Submit" />
-      </form>
+      <div className="login_div">
+      <div className="sub_div">
+        <form action='/login' method='post'>
+          <label>
+            Name:
+            <input className="name_input" name='username' type="text" value={this.state.username} onChange={this.handleChange} />
+          </label>
+          <br/>
+          <label>
+            Password:
+            <input className="password_input" name='password' type="password" value={this.state.password} onChange={this.checkPassword} />
+          </label>
+          <br/>
+            <div className="button_box">
+              <input type="submit" value="Login" />
+              <input type="submit" value="Sign Up" />
+            </div>
+        </form>
+      </div>
+      </div>
     );
   }
 }
