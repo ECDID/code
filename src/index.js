@@ -1,12 +1,11 @@
 import http from "http";
-import * as path from "path";
 import Knex from "knex";
 import { Model } from "objection";
 
 import app from "./app";
 import User from "./models/user";
 
-require("dotenv").config({ path: path.join(__dirname, "../.env") });
+require("dotenv").config();
 const config = require("../db.config");
 
 const PORT = process.env.PORT;
