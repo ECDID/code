@@ -29,7 +29,7 @@ passport.serializeUser((user, cb) => {
 
 passport.deserializeUser(async (id, cb) => {
 	try {
-		const user = await User.query().findById(id);
+		const user = await User.query().findById(id).eager("projects");
 		cb(null, user);
 	} catch (err) {
 		/* istanbul ignore next: remove this when adding actual authentication */

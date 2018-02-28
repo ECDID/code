@@ -17,7 +17,7 @@ const main = async () => {
 	if (process.env.NODE_ENV === "development") {
 		await knex("User").delete();
 		await knex("Project").delete();
-		const user = await User.query().insertGraph({
+		await User.query().insertGraph({
 			username: "mark",
 			password: "1234",
 			projects: [
@@ -49,8 +49,7 @@ const main = async () => {
 					}]
 				}
 			]
-		}).eager("[projects, projects.batches]");
-		console.log(user.projects[0], user.projects[1], user.projects[2]);
+		});
 	}
 
 	const server = http.createServer(app);
