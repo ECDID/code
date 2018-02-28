@@ -5,17 +5,18 @@ import session from "express-session";
 import bodyParser from "body-parser";
 import { mustache } from "consolidate";
 
-import { passport, sessions } from "./routes/sessions";
+import sessions, { passport } from "./routes/sessions";
 import projects from "./routes/projects";
 
 // Create app
 const app = express();
 
 // Log requests
-app.use(logger("dev", {
-	skip: () => {
-		return app.get("env") !== "development";
-	}
+const isTest = app.get("env") === "test";
+const isDev = app.get("env") === "development";
+const logType = isDev ? /* istanbul ignore next */ "dev" : "combined";
+app.use(logger(logType, {
+	skip: () => isTest
 }));
 
 // Parse incoming data
