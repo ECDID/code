@@ -22,12 +22,27 @@ test("generateHash() invalid password", t => {
 	t.throws(() => generateHash(undefined));
 });
 
+test("User insert() no password", async t => {
+	const props = { username: "mark" };
+
+	const err = await t.throws(User.query().insert(props));
+	t.is(err.message, "Invalid password");
+});
+
+test("User insert() no username", async t => {
+	const props = { password: "1234" };
+
+	const err = await t.throws(User.query().insert(props));
+	t.is(err.code, "SQLITE_CONSTRAINT");
+});
+
 test("User insert()", async t => {
 	const props = { username: "mark", password: "1234" };
 
 	const insertedUser = await User.query().insert(props);
 
 	const match = await bcrypt.compare(props.password, insertedUser.password);
+	t.true(insertedUser instanceof User);
 	t.is(insertedUser.username, props.username);
 	t.true(match);
 });
@@ -38,10 +53,10 @@ test("User update()", async t => {
 
 	const insertedUser = await User.query().insert(props);
 	insertedUser.password = newPassword;
-	await User.query().update(insertedUser).where("id", insertedUser.id);
+	const updatedUser = await User.query().updateAndFetchById(insertedUser.id, insertedUser);
 
-	const match = await bcrypt.compare(newPassword, insertedUser.password);
-	t.is(insertedUser.username, props.username);
+	const match = await bcrypt.compare(newPassword, updatedUser.password);
+	t.is(updatedUser.username, insertedUser.username);
 	t.true(match);
 });
 

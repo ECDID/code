@@ -16,7 +16,41 @@ Model.knex(knex);
 const main = async () => {
 	if (process.env.NODE_ENV === "development") {
 		await knex("User").delete();
-		await User.query().insert({ username: "mark", password: "1234" });
+		await knex("Project").delete();
+		const user = await User.query().insertGraph({
+			username: "mark",
+			password: "1234",
+			projects: [
+				{
+					name: "project 1",
+					batches: [{
+						rfidTag: "1x"
+					},
+					{
+						rfidTag: "2x"
+					}]
+				},
+				{
+					name: "project 2",
+					batches: [{
+						rfidTag: "3x"
+					},
+					{
+						rfidTag: "4x"
+					}]
+				},
+				{
+					name: "project 3",
+					batches: [{
+						rfidTag: "5x"
+					},
+					{
+						rfidTag: "6x"
+					}]
+				}
+			]
+		}).eager("[projects, projects.batches]");
+		console.log(user.projects[0], user.projects[1], user.projects[2]);
 	}
 
 	const server = http.createServer(app);
