@@ -1,0 +1,21 @@
+.title{
+    position: relative;
+    top: 50%;
+    left: calc(50% - 250px);
+}
+
+.root{
+    position: relative;
+    top: 50%;
+    left: calc(50% - 250px);
+    width: 500px;
+}
+
+.parent_div{
+    border: solid;
+    border-color:grey;
+    width: 250px;
+    background-color: white;
+    padding: 125px;
+    border-radius: 30px;
+}
