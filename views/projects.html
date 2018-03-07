@@ -175,6 +175,24 @@ class RfidPage extends React.Component {
 
 
 class TicketPage extends React.Component {
+constructor(props){
+    super(props);
+    this.state = {
+      showURL: 'false',
+      currentURL: ''
+    };
+    this.printPage = this.printPage.bind(this);
+    this.getURL = this.getURL(this);
+  }
+
+  printPage(){
+    window.print();
+  }
+
+  getURL(){
+    this.setState({showURL: true});
+  }
+
   render() {
     return(
       <div id>
@@ -189,9 +207,16 @@ class TicketPage extends React.Component {
         <li> Mix Temp: 95 C</li>
         <li> Mix Ratio: 33/2</li>
         </ul>
-        <button> Print </button>
-        <button> Share </button>
+        <button onClick={this.printPage}> Print </button>
+        <button onClick={this.getURL}> Share </button>
         <button> Reset </button>
+        {this.state.showURL ?
+          <div id="urldiv">
+            {window.location.href}
+          </div>:
+          null
+        }
+        
       </div>
     );
   }
