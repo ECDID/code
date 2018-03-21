@@ -6,7 +6,7 @@ import setupDB from "../helpers";
 import User from "../../src/models/user";
 import Batch from "../../src/models/batch";
 
-const userProps = {
+const USER_PROPS = {
 	username: "mark",
 	password: "1234",
 	projects: [{
@@ -19,7 +19,7 @@ test.before(async () => {
 });
 
 test.beforeEach(async t => {
-	const user = await User.query().insertGraph(userProps).eager("projects");
+	const user = await User.query().insertGraph(USER_PROPS).eager("projects");
 	t.context.project = user.projects[0];
 });
 
