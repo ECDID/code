@@ -13,6 +13,7 @@ const USER_PROPS = {
 		name: "project 1"
 	}]
 };
+const RFID_PROPS = { rfidTag: "0000-0000-0000-0000" };
 
 test.before(async () => {
 	await setupDB();
@@ -24,9 +25,7 @@ test.beforeEach(async t => {
 });
 
 test("Batch insert() standalone", async t => {
-	const props = { rfidTag: "0000-0000-0000-0000" };
-
-	const err = await t.throws(Batch.query().insert(props));
+	const err = await t.throws(Batch.query().insert(RFID_PROPS));
 	t.is(err.code, "SQLITE_CONSTRAINT");
 });
 
@@ -37,20 +36,18 @@ test("Batch insert() empty", async t => {
 
 test("Batch insert() proper", async t => {
 	const { project } = t.context;
-	const props = { rfidTag: "0000-0000-0000-0000" };
 
-	const insertedBatch = await project.$relatedQuery("batches").insert(props);
+	const insertedBatch = await project.$relatedQuery("batches").insert(RFID_PROPS);
 
 	t.true(insertedBatch instanceof Batch);
-	t.is(insertedBatch.rfidTag, props.rfidTag);
+	t.is(insertedBatch.rfidTag, RFID_PROPS.rfidTag);
 	t.not(insertedBatch.createdAt, null);
 });
 
 test("Batch update()", async t => {
 	const { project } = t.context;
-	const props = { rfidTag: "0000-0000-0000-0000" };
 
-	const insertedBatch = await project.$relatedQuery("batches").insert(props);
+	const insertedBatch = await project.$relatedQuery("batches").insert(RFID_PROPS);
 	const { createdAt } = insertedBatch;
 	await delay(1000);
 	const updatedBatch = await Batch.query().updateAndFetchById(insertedBatch.id, insertedBatch);
