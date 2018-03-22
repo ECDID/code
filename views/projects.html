@@ -178,11 +178,11 @@ class TicketPage extends React.Component {
 constructor(props){
     super(props);
     this.state = {
-      showURL: 'false',
+      showURL: false,
       currentURL: ''
     };
     this.printPage = this.printPage.bind(this);
-    this.getURL = this.getURL(this);
+    this.getURL = this.getURL.bind(this);
   }
 
   printPage(){
@@ -190,7 +190,12 @@ constructor(props){
   }
 
   getURL(){
-    this.setState({showURL: true});
+    if(this.state.showURL == false){
+      this.setState({showURL: true});
+    }
+    else{
+      this.setState({showURL: false})
+    }
   }
 
   render() {
@@ -211,12 +216,19 @@ constructor(props){
         <button onClick={this.getURL}> Share </button>
         <button> Reset </button>
         {this.state.showURL ?
-          <div id="urldiv">
-            {window.location.href}
-          </div>:
-          null
+           <UrlSection/> :
+           null
         }
-        
+      </div>
+    );
+  }
+}
+
+class UrlSection extends React.Component {
+  render() {
+    return(
+      <div>
+        {window.location.href}
       </div>
     );
   }
