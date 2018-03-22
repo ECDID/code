@@ -15,6 +15,7 @@ TODO: Triple buttons working as intended
     <script src="https://unpkg.com/react@16/umd/react.development.js"></script>
     <script src="https://unpkg.com/react-dom@16/umd/react-dom.development.js"></script>
     <script src="https://unpkg.com/babel-standalone@6.15.0/babel.min.js"></script>
+    <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
   </head>
   <body>
 
@@ -25,71 +26,54 @@ TODO: Triple buttons working as intended
 
 <script type="text/babel">
 
-const project = ['Project_01', 'Project_02', 'Project_03','Project_04', 'Project_05', 'Project_06', 'Project_07'];
-
-const rfid = ['RFID_0001', 'RFID_0002', 'RFID_0003', 'RFID_0004',
-              'RFID_0005', 'RFID_0006', 'RFID_0007', 'RFID_0008',
-              'RFID_0009', 'RFID_0010', 'RFID_0011', 'RFID_0012',
-              'RFID_0013', 'RFID_0014' ]
-
-const dict = {'Project_01': ['RFID_0001','RFID_0002'],
-              'Project_02': ['RFID_0003', 'RFID_0004'],
-              'Project_03': ['RFID_0005', 'RFID_0006'],
-              'Project_04': ['RFID_0007', 'RFID_0008'],
-              'Project_05': ['RFID_0009', 'RFID_0010'],
-              'Project_06': ['RFID_0011', 'RFID_0012'],
-              'Project_07': ['RFID_0013', 'RFID_0014']
-
-            };
-
-const rfid_dict = {'RFID001': ['RFID_0001','RFID_0002'],
-              'Project_02': ['RFID_0003', 'RFID_0004'],
-              'Project_03': ['RFID_0005', 'RFID_0006'],
-              'Project_04': ['RFID_0007', 'RFID_0008'],
-              'Project_05': ['RFID_0009', 'RFID_0010'],
-              'Project_06': ['RFID_0011', 'RFID_0012'],
-              'Project_07': ['RFID_0013', 'RFID_0014']
-
-            };
-
 class MainComponent extends React.Component{
   constructor(props){
 	super(props);
 	this.state = {
-	  current_project: '',
+	  current_project: {},
 	  current_rfid: '',
 	  showProjectList: true,
 	  showRfidList: false,
-	  showTicketList:false
+	  showTicketList:false,
+    allProjects: []
 	};
-	this.handleInputProject = this.handleInputProject.bind(this);
-	this.handleInputRfid = this.handleInputRfid.bind(this);
-	this.handleInputDisplay = this.handleInputDisplay.bind(this);
+  	this.handleInputProject = this.handleInputProject.bind(this);
+  	this.handleInputRfid = this.handleInputRfid.bind(this);
+  	this.handleInputDisplay = this.handleInputDisplay.bind(this);
   }
-  
+
+  componentDidMount() {
+    axios.get(`/api/projects`)
+      .then(res => {
+        const allProjects = res.data.map(obj => { return { name: obj.name, id: obj.id }; });
+        this.setState({ allProjects });
+      });
+  }
+
   handleInputProject(newInput){
+		console.log(newInput);
 	this.setState({current_project: newInput});
   }
-  
+
   handleInputRfid(newRfid){
 	this.setState({current_rfid: newRfid});
   }
-  
+
   handleInputDisplay(project_bool,rfid_bool,ticket_bool){
-	this.setState({showProjectList: project_bool});
-	this.setState({showRfidList: rfid_bool});
-	this.setState({showTicketList: ticket_bool});
+  	this.setState({showProjectList: project_bool});
+  	this.setState({showRfidList: rfid_bool});
+  	this.setState({showTicketList: ticket_bool});
   }
-  
+
   render(){
     return(
-      <div>
+			<div>
 		{this.state.showProjectList ?
-			<ListPage list={project} callback_project={this.handleInputProject} callback_display={this.handleInputDisplay}/> :
+			<ListPage list={this.state.allProjects} callback_project={this.handleInputProject} callback_display={this.handleInputDisplay}/> :
 			null
 		}
 		{this.state.showRfidList ?
-           <RfidPage project={this.state.current_project} dict={dict} callback_rfid={this.handleInputRfid} callback_display={this.handleInputDisplay}/> :
+           <RfidPage project={this.state.current_project} callback_rfid={this.handleInputRfid} callback_display={this.handleInputDisplay}/> :
            null
         }
 		{this.state.showTicketList ?
@@ -100,42 +84,37 @@ class MainComponent extends React.Component{
     );
   }
 }
-			
+
 class ListPage extends React.Component {
   constructor(props){
     super(props);
     this.state = {
-      projectList: this.props.list.map(person =>{return <li><button className='button' onClick={this.showRFID.bind(this,person)}>{person}</button></li>}),
       searchKey: ''
     };
-    
+
     this.searchKeyChange = this.searchKeyChange.bind(this);
     this.setOriginal = this.setOriginal.bind(this);
     this.showRFID = this.showRFID.bind(this);
   }
 
-  
+
 
   searchKeyChange(event){
-	var newInput = event.target.value;
-    const new_project_list = this.props.list.map(person =>{
-      if(person.toLowerCase().includes(newInput.toLowerCase()))
-        return <li><button className='button' onClick={this.showRFID.bind(this,person)}>{person}</button></li>
-    });
-    this.setState({projectList: new_project_list});
+		var searchKey = event.target.value;
+		this.setState({ searchKey });
   }
 
   setOriginal(){
     this.setState({projectList: this.props.list.map(person =>{
-      return <li><button className='button' onClick={this.showRFID.bind(this,person)}>{person}</button></li>
+      return <li><button className='button' onClick={this.showRFID.bind(this,person)}>{person.name}</button></li>
     })});
   }
 
   showRFID(project){
-	this.props.callback_project(project);
-	this.props.callback_display(false,true,false);
+		this.props.callback_project(project);
+		this.props.callback_display(false,true,false);
   }
-  
+
   render() {
     return(
       <div>
@@ -144,7 +123,15 @@ class ListPage extends React.Component {
             <h4>Search Projects:</h4>
             <input type="text" onChange={this.searchKeyChange} />
           </label>
-        <ul>{this.state.projectList}</ul>
+					<ul>{
+						this.props.list.map(person => {
+							if(person.name.toLowerCase().includes(this.state.searchKey.toLowerCase())) {
+								return <li><button className='button' onClick={this.showRFID.bind(this,person)}>{person.name}</button></li>
+							} else {
+								return;
+							}
+						})
+					}</ul>
         <button onClick={this.setOriginal}>Reset</button>
       </div>
     );
@@ -153,20 +140,32 @@ class ListPage extends React.Component {
 
 class RfidPage extends React.Component {
   constructor(props){
-    super(props);
+		super(props);
+		this.state = {
+			allBatches: []
+		};
     this.showTicket = this.showTicket.bind(this);
   }
 
   showTicket(item){
 	this.props.callback_rfid(item);
 	this.props.callback_display(false,false,true);
+	}
+
+  componentDidMount() {
+    axios.get(`/api/projects/${this.props.project.id}`)
+      .then(res => {
+				const allBatches = res.data.batches.map(obj => obj.rfidTag);
+				console.log(allBatches);
+        this.setState({ allBatches });
+      });
   }
 
   render() {
     return(
       <div>
         <h1>Select RFID Tag</h1>
-        {this.props.dict[this.props.project].map(item => (
+        {this.state.allBatches.map(item => (
             <li><button className='button' onClick={this.showTicket.bind(this,item)}>{item}</button></li>
           ))}
       </div>
@@ -176,6 +175,29 @@ class RfidPage extends React.Component {
 
 
 class TicketPage extends React.Component {
+constructor(props){
+    super(props);
+    this.state = {
+      showURL: false,
+      currentURL: ''
+    };
+    this.printPage = this.printPage.bind(this);
+    this.getURL = this.getURL.bind(this);
+  }
+
+  printPage(){
+    window.print();
+  }
+
+  getURL(){
+    if(this.state.showURL == false){
+      this.setState({showURL: true});
+    }
+    else{
+      this.setState({showURL: false})
+    }
+  }
+
   render() {
     return(
       <div id>
@@ -190,9 +212,27 @@ class TicketPage extends React.Component {
         <li> Mix Temp: 95 C</li>
         <li> Mix Ratio: 33/2</li>
         </ul>
-        <button> Print </button>
-        <button> Share </button>
+        <button onClick={this.printPage}> Print </button>
+        <button onClick={this.getURL}> Share </button>
         <button> Reset </button>
+        {this.state.showURL ?
+           <UrlSection/> :
+           null
+        }
+<<<<<<< HEAD
+      </div>
+    );
+  }
+}
+
+class UrlSection extends React.Component {
+  render() {
+    return(
+      <div>
+        {window.location.href}
+=======
+
+>>>>>>> efac83b6e3657483b70abdd6a92b46bf6cdd98fd
       </div>
     );
   }
@@ -240,7 +280,7 @@ ReactDOM.render(
     font-weight:bold;
     padding: 5px 100px;
     text-align: center;
-    text-decoration: ;
+    /* text-decoration: ; */
     display: inline-block;
     border: solid;
     border-radius: 3px;
