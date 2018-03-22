@@ -132,10 +132,14 @@ class ListPage extends React.Component {
 							}
 						})
 					}</ul>
-        <button onClick={this.setOriginal}>Reset</button>
+        <button onClick={refreshPage}>Reset</button>
       </div>
     );
   }
+}
+
+function refreshPage(){
+  window.location.reload();
 }
 
 class RfidPage extends React.Component {
@@ -214,7 +218,7 @@ constructor(props){
         </ul>
         <button onClick={this.printPage}> Print </button>
         <button onClick={this.getURL}> Share </button>
-        <button> Reset </button>
+        <button onClick={refreshPage}> Reset </button>
         {this.state.showURL ?
            <UrlSection/> :
            null
