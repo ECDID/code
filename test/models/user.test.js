@@ -5,6 +5,10 @@ import setupDB from "../helpers";
 
 import User, { generateHash } from "../../src/models/user";
 
+const GOOD_LOGIN = { username: "mark", password: "1234" };
+const { username, ...LOGIN_NO_USER } = GOOD_LOGIN;
+const { password, ...LOGIN_NO_PASS } = GOOD_LOGIN;
+
 test.before(async () => {
 	await setupDB();
 });
@@ -23,21 +27,21 @@ test("generateHash() invalid password", t => {
 });
 
 test("User insert() no password", async t => {
-	const props = { username: "mark" };
+	const props = LOGIN_NO_PASS;
 
 	const err = await t.throws(User.query().insert(props));
 	t.is(err.message, "Invalid password");
 });
 
 test("User insert() no username", async t => {
-	const props = { password: "1234" };
+	const props = LOGIN_NO_USER;
 
 	const err = await t.throws(User.query().insert(props));
 	t.is(err.code, "SQLITE_CONSTRAINT");
 });
 
 test("User insert()", async t => {
-	const props = { username: "mark", password: "1234" };
+	const props = GOOD_LOGIN;
 
 	const insertedUser = await User.query().insert(props);
 
@@ -48,7 +52,7 @@ test("User insert()", async t => {
 });
 
 test("User update()", async t => {
-	const props = { username: "mark", password: "1234" };
+	const props = GOOD_LOGIN;
 	const newPassword = "12345";
 
 	const insertedUser = await User.query().insert(props);
@@ -61,7 +65,7 @@ test("User update()", async t => {
 });
 
 test("User.verifyPassword()", async t => {
-	const props = { username: "mark", password: "1234" };
+	const props = GOOD_LOGIN;
 
 	const insertedUser = await User.query().insert(props);
 

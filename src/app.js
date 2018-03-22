@@ -45,6 +45,7 @@ app.set("view engine", "html");
 
 // Set up routes
 app.use("/", projects, sessions);
+app.use("/css", express.static("views/css"));
 
 // Catch 404 and forward to error handler
 app.use((req, res, next) => {

@@ -20,7 +20,7 @@ projects.param("project", (req, res, next, id) => {
 			});
 			next(err);
 		}
-	} catch (err) {
+	} catch (err) /* istanbul ignore next */ {
 		Object.defineProperty(err, "status", {
 			get: () => 404
 		});
@@ -34,7 +34,7 @@ projects.get("/", ensureLoggedIn(), (req, res) => {
 
 projects.get("/api/projects", async (req, res) => {
 	await req.user.$loadRelated("projects");
-	res.send(req.user);
+	res.send(req.user.projects);
 });
 
 projects.get("/api/projects/:project", async (req, res) => {

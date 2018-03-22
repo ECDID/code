@@ -45,7 +45,7 @@ class MainComponent extends React.Component{
   componentDidMount() {
     axios.get(`/api/projects`)
       .then(res => {
-        const allProjects = res.data.projects.map(obj => { return { name: obj.name, id: obj.id }; });
+        const allProjects = res.data.map(obj => { return { name: obj.name, id: obj.id }; });
         this.setState({ allProjects });
       });
   }
@@ -219,6 +219,7 @@ constructor(props){
            <UrlSection/> :
            null
         }
+<<<<<<< HEAD
       </div>
     );
   }
@@ -229,6 +230,9 @@ class UrlSection extends React.Component {
     return(
       <div>
         {window.location.href}
+=======
+
+>>>>>>> efac83b6e3657483b70abdd6a92b46bf6cdd98fd
       </div>
     );
   }
@@ -276,7 +280,7 @@ ReactDOM.render(
     font-weight:bold;
     padding: 5px 100px;
     text-align: center;
-    text-decoration: ;
+    /* text-decoration: ; */
     display: inline-block;
     border: solid;
     border-radius: 3px;
