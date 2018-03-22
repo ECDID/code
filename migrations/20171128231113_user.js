@@ -2,8 +2,8 @@
 const up = async knex => {
 	await knex.schema.createTableIfNotExists("User", table => {
 		table.increments("id").primary();
-		table.string("username");
-		table.string("password");
+		table.string("username").notNullable();
+		table.string("password").notNullable();
 	});
 };
 
