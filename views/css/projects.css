@@ -1,0 +1,84 @@
+head {background-color: #000000;}
+h1 {font-family: sans-serif;
+    padding:0px;
+    margin:0px;
+    padding-top: 15px;}
+h4 {font-family: sans-serif;
+    margin-bottom:0px;
+    margin-top: 15px;
+}
+ul { list-style-type: none;
+     padding:0px;
+     margin:0px;
+   }
+
+li { list-style-type: none;
+     padding:0px;
+     margin:0px;
+   }
+button{
+  font-family: sans-serif;
+  display: inline-block;
+  font-weight: bold;
+  font-size: 14px;
+}
+.label{}
+.button{
+  background-color: #f44336;
+  color: black;
+  font-size: 16px;
+  font-weight:bold;
+  padding: 5px 100px;
+  text-align: center;
+  /* text-decoration: ; */
+  display: inline-block;
+  border: solid;
+  border-radius: 3px;
+  border-color: #FFFFFF;
+} 
+
+.homeDiv{
+  position: relative;
+  top: 50%;
+  left: calc(50% - 100px);
+}
+
+.acme_image{
+  position: relative;
+  top: 50%;
+  left: calc(50% - 125px);
+}
+
+.projectDiv{
+  position: relative;
+  top: 50%;
+  left: calc(50% - 125px);
+}
+
+.projectDiv > label{
+  position: relative;
+  left: 5%;
+}
+
+.projectDiv > button{
+  position: relative;
+  left: 7%;
+}
+
+.rfidDiv{
+  position: relative;
+  top: 50%;
+  left: calc(50% - 105px);
+}
+
+.ticketDiv{
+  position: relative;
+  top: 50%;
+  left: calc(50% - 125px);
+  border: solid;
+  width: 20%;
+}
+.ticketDiv2{
+  position: relative;
+  left: 5%;
+}

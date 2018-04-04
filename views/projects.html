@@ -16,10 +16,11 @@ TODO: Triple buttons working as intended
     <script src="https://unpkg.com/react-dom@16/umd/react-dom.development.js"></script>
     <script src="https://unpkg.com/babel-standalone@6.15.0/babel.min.js"></script>
     <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+    <link rel="stylesheet" href="css/projects.css">
   </head>
   <body>
 
-  <img src="http://spokane.access2experience.com/img/profile/7d45ef8c-d70f-42b0-afb1-963ec1100489.jpg" height="110" width="275" align:"middle"/>
+  <img class="acme_image" src="http://spokane.access2experience.com/img/profile/7d45ef8c-d70f-42b0-afb1-963ec1100489.jpg" height="110" width="275" align:"middle"/>
     <div id="root"></div>
   </body>
 </html>
@@ -31,8 +32,9 @@ class MainComponent extends React.Component{
 	super(props);
 	this.state = {
 	  current_project: {},
-	  current_rfid: '',
-	  showProjectList: true,
+    current_rfid: '',
+    showHome: true,
+	  showProjectList: false,
 	  showRfidList: false,
 	  showTicketList:false,
     allProjects: []
@@ -59,7 +61,8 @@ class MainComponent extends React.Component{
 	this.setState({current_rfid: newRfid});
   }
 
-  handleInputDisplay(project_bool,rfid_bool,ticket_bool){
+  handleInputDisplay(home_bool,project_bool,rfid_bool,ticket_bool){
+    this.setState({showHome: home_bool})
   	this.setState({showProjectList: project_bool});
   	this.setState({showRfidList: rfid_bool});
   	this.setState({showTicketList: ticket_bool});
@@ -67,22 +70,56 @@ class MainComponent extends React.Component{
 
   render(){
     return(
-			<div>
-		{this.state.showProjectList ?
-			<ListPage list={this.state.allProjects} callback_project={this.handleInputProject} callback_display={this.handleInputDisplay}/> :
-			null
-		}
-		{this.state.showRfidList ?
-           <RfidPage project={this.state.current_project} callback_rfid={this.handleInputRfid} callback_display={this.handleInputDisplay}/> :
-           null
+      <div>
+        {this.state.showHome ?
+          <SearchChoice callback_display={this.handleInputDisplay}/> : 
+          null
         }
-		{this.state.showTicketList ?
-           <TicketPage rfid_value={this.state.current_rfid}/> :
-           null
+        {this.state.showProjectList ?
+          <ListPage list={this.state.allProjects} callback_project={this.handleInputProject} callback_display={this.handleInputDisplay}/>:
+          null
+        }
+        {this.state.showRfidList ?
+          <RfidPage project={this.state.current_project} callback_rfid={this.handleInputRfid} callback_display={this.handleInputDisplay}/> :
+          null
+        }
+        {this.state.showTicketList ?
+          <TicketPage rfid_value={this.state.current_rfid}/> :
+          null
         }
       </div>
     );
   }
+}
+
+class SearchChoice extends React.Component {
+  constructor(props){
+    super(props);
+    this.state = {
+      choice: 0
+    };
+    this.projectButton = this.projectButton.bind(this);
+    this.rfidButton = this.rfidButton.bind(this);
+  }
+
+  projectButton(){
+    this.props.callback_display(false,true,false,false);
+  }
+
+  rfidButton(){
+    this.props.callback_display(false,false,true,false);
+  }
+
+  render(){
+    return(
+      <div className="homeDiv">
+        <p>Search by Project or RFID</p>
+        <button onClick={this.projectButton}>Projects</button>
+        <button onClick={this.rfidButton}>RFIDs</button>
+      </div>
+    );
+  }
+
 }
 
 class ListPage extends React.Component {
@@ -97,8 +134,6 @@ class ListPage extends React.Component {
     this.showRFID = this.showRFID.bind(this);
   }
 
-
-
   searchKeyChange(event){
 		var searchKey = event.target.value;
 		this.setState({ searchKey });
@@ -112,27 +147,26 @@ class ListPage extends React.Component {
 
   showRFID(project){
 		this.props.callback_project(project);
-		this.props.callback_display(false,true,false);
+		this.props.callback_display(false,false,true,false);
   }
 
   render() {
     return(
-      <div>
-        <h1>Project Name: </h1>
-          <label>
-            <h4>Search Projects:</h4>
-            <input type="text" onChange={this.searchKeyChange} />
-          </label>
-					<ul>{
-						this.props.list.map(person => {
-							if(person.name.toLowerCase().includes(this.state.searchKey.toLowerCase())) {
-								return <li><button className='button' onClick={this.showRFID.bind(this,person)}>{person.name}</button></li>
-							} else {
-								return;
-							}
-						})
-					}</ul>
-        <button onClick={this.setOriginal}>Reset</button>
+      <div className="projectDiv">
+            <label>
+              <h4>Search Projects:</h4>
+              <input type="text" onChange={this.searchKeyChange} />
+            </label>
+            <ul>{
+              this.props.list.map(person => {
+                if(person.name.toLowerCase().includes(this.state.searchKey.toLowerCase())) {
+                  return <li><button className='button' onClick={this.showRFID.bind(this,person)}>{person.name}</button></li>
+                } else {
+                  return;
+                }
+              })
+            }</ul>
+          <button onClick={this.setOriginal}>Reset</button>
       </div>
     );
   }
@@ -149,7 +183,7 @@ class RfidPage extends React.Component {
 
   showTicket(item){
 	this.props.callback_rfid(item);
-	this.props.callback_display(false,false,true);
+	this.props.callback_display(false,false,false,true);
 	}
 
   componentDidMount() {
@@ -163,7 +197,7 @@ class RfidPage extends React.Component {
 
   render() {
     return(
-      <div>
+      <div className="rfidDiv">
         <h1>Select RFID Tag</h1>
         {this.state.allBatches.map(item => (
             <li><button className='button' onClick={this.showTicket.bind(this,item)}>{item}</button></li>
@@ -172,7 +206,6 @@ class RfidPage extends React.Component {
     );
   }
 }
-
 
 class TicketPage extends React.Component {
 constructor(props){
@@ -200,24 +233,26 @@ constructor(props){
 
   render() {
     return(
-      <div id>
+      <div className="ticketDiv">
         <h1>Ticket Information</h1>
-        {this.props.rfid_value}
-        <ul>
-        <li> Date: 03/03/03</li>
-        <li> Slump Percentage: 03% </li>
-        <li> Sand Percent: 30% </li>
-        <li> Mud Percent: 42% </li>
-        <li> Portland Rating: 69 / 133</li>
-        <li> Mix Temp: 95 C</li>
-        <li> Mix Ratio: 33/2</li>
-        </ul>
+        <div className="ticketDiv2">
+          {this.props.rfid_value}
+          <ul>
+          <li> Date: 03/03/03</li>
+          <li> Slump Percentage: 03% </li>
+          <li> Sand Percent: 30% </li>
+          <li> Mud Percent: 42% </li>
+          <li> Portland Rating: 69 / 133</li>
+          <li> Mix Temp: 95 C</li>
+          <li> Mix Ratio: 33/2</li>
+          </ul>
+        </div>
         <button onClick={this.printPage}> Print </button>
         <button onClick={this.getURL}> Share </button>
         <button> Reset </button>
         {this.state.showURL ?
-           <UrlSection/> :
-           null
+          <UrlSection/> :
+          null
         }
       </div>
     );
@@ -242,44 +277,3 @@ ReactDOM.render(
 );
 
 </script>
-
-<style>
-  head {background-color: #000000;}
-  h1 {font-family: sans-serif;
-      padding:0px;
-      margin:0px;
-      padding-top: 15px;}
-  h4 {font-family: sans-serif;
-      margin-bottom:0px;
-      margin-top: 15px;
-  }
-  ul { list-style-type: none;
-       padding:0px;
-       margin:0px;
-     }
-
-  li { list-style-type: none;
-       padding:0px;
-       margin:0px;
-     }
-  button{
-    font-family: sans-serif;
-    display: inline-block;
-    font-weight: bold;
-    font-size: 14px;
-  }
-  .label{}
-  .button{
-    background-color: #f44336;
-    color: black;
-    font-size: 16px;
-    font-weight:bold;
-    padding: 5px 100px;
-    text-align: center;
-    /* text-decoration: ; */
-    display: inline-block;
-    border: solid;
-    border-radius: 3px;
-    border-color: #FFFFFF;
-}
-</style>
