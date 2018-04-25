@@ -187,12 +187,31 @@ class RfidPage extends React.Component {
 	}
 
   componentDidMount() {
-    axios.get(`/api/projects/${this.props.project.id}`)
+    if (this.props.project.id === undefined) {
+      axios.get(`/api/projects`)
       .then(res => {
-				const allBatches = res.data.batches.map(obj => obj.rfidTag);
-				console.log(allBatches);
+        const allProjects = res.data.map(obj => { return { name: obj.name, id: obj.id }; });
+        return allProjects;
+      }).then(projects =>{
+        return Promise.all(projects.map(project => {
+          return axios.get(`/api/projects/${project.id}`)
+            .then(res => {
+              const allBatches = res.data.batches.map(obj => obj.rfidTag);
+              return allBatches;
+            });
+        }));
+      }).then(batches => {
+        const allBatches = batches.reduce((acc, val) => acc.concat(val), []);
         this.setState({ allBatches });
       });
+    } else {
+      axios.get(`/api/projects/${this.props.project.id}`)
+        .then(res => {
+          const allBatches = res.data.batches.map(obj => obj.rfidTag);
+          console.log(allBatches);
+          this.setState({ allBatches });
+        });
+    }
   }
 
   render() {
