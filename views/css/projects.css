@@ -1,3 +1,13 @@
+html{
+  height: 100%;
+}
+
+body{
+  height: 100%;
+}
+
+
+
 head {background-color: #000000;}
 h1 {font-family: sans-serif;
     padding:0px;
@@ -39,8 +49,17 @@ button{
 
 .homeDiv{
   position: relative;
-  top: 50%;
-  left: calc(50% - 100px);
+  left: calc(43% - 100px);
+}
+
+.homeDiv > p{
+  font-size: 40px;
+}
+
+.homeDiv > button{
+  width: 15%;
+  height: 40px;
+  border-radius: 10px;
 }
 
 .acme_image{
@@ -51,7 +70,6 @@ button{
 
 .projectDiv{
   position: relative;
-  top: 50%;
   left: calc(50% - 125px);
 }
 
@@ -67,18 +85,37 @@ button{
 
 .rfidDiv{
   position: relative;
-  top: 50%;
   left: calc(50% - 105px);
 }
 
 .ticketDiv{
+  margin-top: 5%;
   position: relative;
-  top: 50%;
-  left: calc(50% - 125px);
+  left: calc(30% - 125px);
   border: solid;
-  width: 20%;
+  border-color: red;
+  border-radius: 12px;
+  width: 60%;
+  height:60%;
+  text-align: center;
 }
+.ticketDiv > h1{
+  font-size: 50px;
+}
+
 .ticketDiv2{
   position: relative;
-  left: 5%;
+  font-size: 30px;
+}
+
+.ticketDiv > button{
+  margin-top: 10%;
+}
+
+#root{
+  height: 100%;
+}
+
+#root > div{
+  height: 100%;
 }

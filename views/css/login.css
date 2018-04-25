@@ -1,3 +1,11 @@
+html{
+    height: 100%;
+}
+
+body{
+    height: 100%;
+}
+
 header{
     background: red;
 }
@@ -14,7 +22,7 @@ label{
 
 .root{
     position: relative;
-    top: 50%;
+    height:100%;
     left: calc(50% - 250px);
     width: 500px;
 }
@@ -37,13 +45,13 @@ label{
 .name_input{
     margin-left: 52px;
     margin-bottom: 10px;
-    color:#fafafa;
+    color:black;
 }
 
 .password_input{
     margin-left: 10px;
     margin-bottom: 10px;
-    color:#fafafa;
+    color:black;
 }
 
 .button_box{
